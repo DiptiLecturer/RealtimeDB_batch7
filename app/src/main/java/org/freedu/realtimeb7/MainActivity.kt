@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-        db = FirebaseDatabase.getInstance().getReference("NKotes")
+        db = FirebaseDatabase.getInstance().getReference("Notes")
 
         adapter = NoteAdapter(list){
             db.child(it.id!!).removeValue()
