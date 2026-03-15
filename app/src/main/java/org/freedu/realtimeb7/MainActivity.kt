@@ -1,6 +1,7 @@
 package org.freedu.realtimeb7
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -33,22 +34,27 @@ class MainActivity : AppCompatActivity() {
 
         db = FirebaseDatabase.getInstance().getReference("Notes")
 
-        adapter = NoteAdapter(list){
-            db.child(it.id!!).removeValue()
-        }
+        adapter = NoteAdapter(list,
+            onDelete = {
+                note -> db.child(note.id!!).removeValue()
+            },
+            onEdit = {note ->
+                val intent = Intent(this, AddNoteActivity::class.java)
+                intent.putExtra("note", note)
+                startActivity(intent)
+
+            }
+
+            )
 
         binding.recyclerView.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         binding.recyclerView.adapter = adapter
 
-        binding.btnAdd.setOnClickListener {
-            val title  = binding.etTitle.text.toString()
-            val description = binding.etDescription.text.toString()
-            val id = db.push().key!!
-            val note = Note(id, title, description)
-            db.child(id).setValue(note)
-            binding.etTitle.text.clear()
-            binding.etDescription.text.clear()
+        binding.btnAddNote.setOnClickListener {
+            val intent = Intent(this, AddNoteActivity::class.java)
+            startActivity(intent)
         }
+
         loadNotes()
     }
     private fun loadNotes() {

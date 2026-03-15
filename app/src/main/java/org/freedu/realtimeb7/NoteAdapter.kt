@@ -9,7 +9,8 @@ import org.freedu.realtimeb7.databinding.ItemNoteBinding
 
 class NoteAdapter(
     private val list: MutableList<Note>,
-    private val onDelete: (Note) -> Unit
+    private val onDelete: (Note) -> Unit,
+    private val onEdit :(Note)-> Unit
 ) :
     RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoteViewHolder {
@@ -24,6 +25,9 @@ class NoteAdapter(
 
         holder.binding.btnDelete.setOnClickListener {
             onDelete(note)
+        }
+        holder.binding.btnEdit.setOnClickListener {
+            onEdit(note)
         }
     }
 
